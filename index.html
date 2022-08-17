@@ -5,26 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Sophie Brunner" />
-    <meta name="description" content="To Do App using Vue." />
-    <title>To Do with a Vue</title>
+    <meta
+      name="description"
+      content="To-Do-App in the framework VueJS. Basic functions are adding, listing and marking To-Dos. Advanced functions are filter To-Dos and delete To-Dos."
+    />
+    <title>To-Do-App with VueJS</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main id="app">
-      <input type="text" v-model="text" />
-      <button @click="addToDo">Add To Do</button>
-      <ul>
-        <li v-for="toDo in toDos" :key="toDo.id">
+      <h1>To-Do-App</h1>
+      <form @submit.prevent id="filter-and-delete">
+        <input type="text" v-model="description" placeholder="Get sh*t done!" />
+        <button v-on="toDoAddingEvents">Add</button>
+        <h2>Filter & Options</h2>
+        <ul>
           <input
-            type="checkbox"
-            :id="'id' + toDo.id"
-            v-model="toDo.done"
-            @change="onCheckboxChange"
+            type="radio"
+            name="filter-todos"
+            id="filter-all-todos"
+            value="all"
+            checked
+            v-model="filter"
           />
-          <label :for="'id' + toDo.id">{{ toDo.description }}</label>
-          <button @click="removeToDo(toDo)">Remove To Do</button>
-        </li>
-      </ul>
+          <label for="filter-all-todos">All</label>
+          <input
+            type="radio"
+            name="filter-todos"
+            id="filter-open-todos"
+            value="open"
+            v-model="filter"
+          />
+          <label for="filter-open-todos">Open</label>
+          <input
+            type="radio"
+            name="filter-todos"
+            id="filter-done-todos"
+            value="done"
+            v-model="filter"
+          />
+          <label for="filter-done-todos">Done</label>
+        </ul>
+        <button>Remove All Done To-Dos</button>
+      </form>
+      <section id="todo-list">
+        <ul>
+          <li v-for="toDo in filteredToDos" :key="toDo.id">
+            <input
+              type="checkbox"
+              :id="'id' + toDo.id"
+              v-model="toDo.done"
+              @change="onCheckboxChange"
+            />
+            <label :for="'id' + toDo.id">{{ toDo.description }}</label>
+            <button @click="removeToDo(toDo)">Remove To Do</button>
+          </li>
+        </ul>
+      </section>
       <p>{{ numberOfOpenToDos }}</p>
     </main>
     <script src="https://unpkg.com/vue@next"></script>

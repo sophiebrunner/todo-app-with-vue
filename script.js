@@ -2,10 +2,31 @@ Vue.createApp({
   data() {
     return {
       toDos: [],
-      text: "",
+      description: "",
+      filter: "all",
     };
   },
+
   computed: {
+    toDoAddingEvents() {
+      return {
+        click: this.addToDo,
+        enter: this.addToDo,
+      };
+    },
+
+    filteredToDos() {
+      let toDoList = [];
+      if (this.filter === "all") {
+        toDoList = this.toDos;
+      } else if (this.filter === "open") {
+        toDoList = this.toDos.filter((toDo) => !toDo.done);
+      } else if (this.filter === "done") {
+        toDoList = this.toDos.filter((toDo) => toDo.done);
+      }
+      return toDoList;
+    },
+
     numberOfOpenToDos() {
       return this.toDos.filter((toDo) => !toDo.done).length;
       // let openToDos = 0;
@@ -19,9 +40,11 @@ Vue.createApp({
       // return openToDos;
     },
   },
+
   created() {
     this.getData();
   },
+
   methods: {
     saveData() {
       localStorage.setItem("toDos", JSON.stringify(this.toDos));
@@ -29,6 +52,7 @@ Vue.createApp({
     getData() {
       this.toDos = JSON.parse(localStorage.getItem("toDos")) || [];
     },
+
     generateId() {
       let id = 1;
       if (this.toDos.length > 0) {
@@ -39,17 +63,21 @@ Vue.createApp({
       }
       return id;
     },
+
     addToDo() {
       this.toDos.push({
-        description: this.text,
+        description: this.description,
         done: false,
         id: this.generateId(),
       });
       this.saveData();
+      this.text = "";
     },
+
     onCheckboxChange() {
       this.saveData();
     },
+
     removeToDo(singleToDo) {
       this.toDos = this.toDos.filter((toDo) => {
         return singleToDo !== toDo;
