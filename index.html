@@ -12,21 +12,34 @@
     <title>To-Do-App with VueJS</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
+    <header id="page-header">
+      <h1>Todo App</h1>
+    </header>
+
     <main id="app">
-      <h1>To-Do-App</h1>
-      <form @submit.prevent id="filter-and-delete">
-        <input type="text" v-model="description" placeholder="Get sh*t done!" />
-        <button v-on="toDoAddingEvents">Add</button>
+      <form @submit.prevent class="add-todo">
+        <input
+          type="text"
+          v-model="description"
+          placeholder="Get sh*t done!"
+          class="add-todo__input"
+        />
+        <button v-on="toDoAddingEvents" class="add-todo__btn">Add</button>
+      </form>
+
+      <section class="filter-and-delete">
         <h2>Filter & Options</h2>
-        <ul>
+        <ul class="filter-options">
           <input
             type="radio"
             name="filter-todos"
             id="filter-all-todos"
             value="all"
-            checked
             v-model="filter"
+            class="filter-and-delete__radio"
+            checked
           />
           <label for="filter-all-todos">All</label>
           <input
@@ -35,6 +48,7 @@
             id="filter-open-todos"
             value="open"
             v-model="filter"
+            class="filter-and-delete__radio"
           />
           <label for="filter-open-todos">Open</label>
           <input
@@ -43,27 +57,46 @@
             id="filter-done-todos"
             value="done"
             v-model="filter"
+            class="filter-and-delete__radio"
           />
           <label for="filter-done-todos">Done</label>
         </ul>
-        <button>Remove All Done To-Dos</button>
-      </form>
+        <button @click="removeDoneToDos" class="filter-and-delete__btn">
+          Remove Done To-Dos
+        </button>
+      </section>
+
       <section id="todo-list">
-        <ul>
-          <li v-for="toDo in filteredToDos" :key="toDo.id">
+        <h2>Your Todos</h2>
+        <ul class="todo-list__container">
+          <li
+            v-for="toDo in filteredToDos"
+            :key="toDo.id"
+            class="todo-list__item"
+          >
             <input
               type="checkbox"
-              :id="'id' + toDo.id"
+              :id="'todo' + toDo.id"
               v-model="toDo.done"
               @change="onCheckboxChange"
+              class="todo-list__item--checkbox"
             />
-            <label :for="'id' + toDo.id">{{ toDo.description }}</label>
-            <button @click="removeToDo(toDo)">Remove To Do</button>
+            <label :for="'todo' + toDo.id" class="todo-list__item--label"
+              >{{ toDo.description }}</label
+            >
+            <button class="todo-list__item--btn-edit">Edit</button>
+            <button
+              @click="removeSingleToDo(toDo)"
+              class="todo-list__item--btn-delete"
+            >
+              Remove
+            </button>
           </li>
         </ul>
+        <p class="todo-list__open">Your open Todos: {{ numberOfOpenToDos }}</p>
       </section>
-      <p>{{ numberOfOpenToDos }}</p>
     </main>
+
     <script src="https://unpkg.com/vue@next"></script>
     <script src="script.js"></script>
   </body>

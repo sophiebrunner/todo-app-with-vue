@@ -1,0 +1,129 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+:root {
+  --padding-small: 0.25em 0.5em;
+  --border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 20px;
+  --clr-primary: #dd5571;
+  --clr-secondary: #3d89ae;
+  --clr-highlight: #ebad3d;
+  --clr-done: #61d2a4;
+  --clr-bg: #f5f5f5;
+}
+
+main,
+#page-header {
+  width: 60ch;
+}
+
+main {
+  padding: 2em 4em 0 4em;
+  height: 100vh;
+  background-color: var(--clr-bg);
+}
+
+#page-header {
+  padding: 0;
+  margin: 0;
+  color: white;
+  background-color: var(--clr-primary);
+  text-align: center;
+}
+
+h1 {
+  font-size: 4rem;
+  text-shadow: 3px 3px var(--clr-secondary), 6px 6px var(--clr-highlight);
+}
+
+.add-todo {
+  width: 40ch;
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5em;
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: 0.15fr 1fr;
+  row-gap: 0.2em;
+  padding-left: 0;
+}
+
+.filter-and-delete__radio {
+  all: unset;
+  box-sizing: border-box;
+  width: 1em;
+  height: 1em;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-color: white;
+  transition: background-color 0.2s;
+}
+
+.filter-and-delete__radio:checked {
+  background-color: var(--clr-secondary);
+}
+
+.add-todo__input,
+.add-todo__btn,
+.filter-and-delete__btn,
+.todo-list__item--btn-edit,
+.todo-list__item--btn-delete {
+  font-size: 26px;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--padding-small);
+}
+
+.add-todo__btn,
+.filter-and-delete__btn,
+.todo-list__item--btn-edit,
+.todo-list__item--btn-delete {
+  color: white;
+  background-color: var(--clr-secondary);
+  box-shadow: 5px 5px var(--clr-primary);
+}
+
+.todo-list__container {
+  list-style: none;
+  padding-left: 0;
+}
+
+.todo-list__item {
+  margin: 0.5em 0;
+  padding: 0.8em;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 8% 52% 20% 20%;
+}
+
+.todo-list__item--label {
+  font-size: 1.5rem;
+}
+
+.todo-list__item--checkbox {
+  all: unset;
+  box-sizing: border-box;
+  width: 1em;
+  height: 1em;
+  border: 2px solid black;
+  border-radius: 3px;
+}
+
+.todo-list__item--checkbox:checked {
+  color: white;
+  background-color: var(--clr-done);
+}

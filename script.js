@@ -71,18 +71,23 @@ Vue.createApp({
         id: this.generateId(),
       });
       this.saveData();
-      this.text = "";
+      this.description = "";
     },
 
     onCheckboxChange() {
       this.saveData();
     },
 
-    removeToDo(singleToDo) {
+    removeSingleToDo(singleToDo) {
       this.toDos = this.toDos.filter((toDo) => {
         return singleToDo !== toDo;
       });
       this.saveData();
+    },
+
+    removeDoneToDos() {
+      this.toDos = this.toDos.filter((toDo) => toDo.done === false);
+      this, this.saveData();
     },
   },
 }).mount("#app");
