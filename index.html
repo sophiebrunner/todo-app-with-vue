@@ -14,15 +14,18 @@
       <input type="text" v-model="text" />
       <button @click="addToDo">Add To Do</button>
       <ul>
-        <li v-for="{ description, done, id } in toDos" :key="toDos.id">
+        <li v-for="toDo in toDos" :key="toDo.id">
           <input
             type="checkbox"
-            :id="id"
-            @change="onCheckboxChange(id, $event)"
+            :id="'id' + toDo.id"
+            v-model="toDo.done"
+            @change="onCheckboxChange"
           />
-          <label :for="id">{{ description }}</label>
+          <label :for="'id' + toDo.id">{{ toDo.description }}</label>
+          <button @click="removeToDo(toDo)">Remove To Do</button>
         </li>
       </ul>
+      <p>{{ numberOfOpenToDos }}</p>
     </main>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="script.js"></script>

@@ -1,21 +1,23 @@
 Vue.createApp({
   data() {
     return {
-      toDos: [
-        { description: "Learn HTML", done: true, id: 1 },
-        {
-          description: "Learn CSS",
-          done: false,
-          id: 2,
-        },
-        {
-          description: "Learn JavaScript",
-          done: true,
-          id: 3,
-        },
-      ],
+      toDos: [],
       text: "",
     };
+  },
+  computed: {
+    numberOfOpenToDos() {
+      return this.toDos.filter((toDo) => !toDo.done).length;
+      // let openToDos = 0;
+
+      // for (let toDo of this.toDos) {
+      //   if (toDo.done === false) {
+      //     openToDos++;
+      //   }
+      // }
+
+      // return openToDos;
+    },
   },
   created() {
     this.getData();
@@ -25,24 +27,38 @@ Vue.createApp({
       localStorage.setItem("toDos", JSON.stringify(this.toDos));
     },
     getData() {
-      this.toDos = JSON.parse(localStorage.getItem("toDos"));
+      this.toDos = JSON.parse(localStorage.getItem("toDos")) || [];
+    },
+    generateId() {
+      let id = 1;
+      if (this.toDos.length > 0) {
+        const sortedIds = this.toDos
+          .map((toDo) => toDo.id)
+          .sort((a, b) => a - b);
+        id = sortedIds[sortedIds.length - 1] + 1;
+      }
+      return id;
     },
     addToDo() {
       this.toDos.push({
         description: this.text,
         done: false,
-        id: this.toDos.length + 1,
+        id: this.generateId(),
       });
       this.saveData();
     },
-    onCheckboxChange(id, event) {
-      const isDone = event.target.checked;
-      const currentToDo = this.toDos.find((toDo) => toDo.id === id);
-      console.log(currentToDo);
-      console.log(id);
-      currentToDo.done = isDone;
+    onCheckboxChange() {
+      this.saveData();
+    },
+    removeToDo(singleToDo) {
+      this.toDos = this.toDos.filter((toDo) => {
+        return singleToDo !== toDo;
+      });
+      this.saveData();
     },
   },
 }).mount("#app");
 
 // Wenn To Dos löschen möglich: größte id rausfiltern und dort +1
+// Math.max() // id des letzten Elements // ((universal unique identifier)) // random number vergeben und mit aktuellem timestamp arbeiten (timestamp + randomnumber)
+// Beim Hinzufügen der toDos id generieren (id: Code)
