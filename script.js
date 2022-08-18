@@ -4,6 +4,7 @@ Vue.createApp({
       toDos: [],
       description: "",
       filter: "all",
+      isChecked: false,
     };
   },
 
@@ -65,18 +66,25 @@ Vue.createApp({
     },
 
     addToDo() {
-      this.toDos.push({
-        description: this.description,
-        done: false,
-        id: this.generateId(),
-      });
-      this.saveData();
-      this.description = "";
+      if (this.description.length >= 5) {
+        this.toDos.push({
+          description: this.description,
+          done: false,
+          id: this.generateId(),
+        });
+        this.saveData();
+        this.description = "";
+      } else {
+        alert("Please insert a Todo with 5 or more characters");
+      }
     },
 
-    onCheckboxChange() {
+    onCheckboxChange(singleToDo) {
+      this.isChecked = singleToDo.done;
       this.saveData();
     },
+
+    editToDo() {},
 
     removeSingleToDo(singleToDo) {
       this.toDos = this.toDos.filter((toDo) => {
