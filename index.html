@@ -63,7 +63,7 @@
             <label for="filter-done-todos">Done</label>
           </ul>
           <button @click="removeDoneToDos" class="filter-and-delete__btn">
-            Remove Done To-Dos
+            Remove Done Todos
           </button>
         </section>
 
@@ -87,10 +87,17 @@
                 :for="'todo' + toDo.id"
                 class="todo-list__item--label"
                 :class="{ checked: isChecked }"
-                >{{ toDo.description }}</label
               >
+                <input
+                  type="text"
+                  v-model="toDo.description"
+                  :readonly="readOnly"
+                  class="todo-list__item--description"
+                  :class="{ checked: isChecked, edit: !readOnly }"
+                />
+              </label>
               <button @click="editToDo" class="todo-list__item--btn-edit">
-                Edit
+                {{ txtEdit }}
               </button>
               <button
                 @click="removeSingleToDo(toDo)"
@@ -101,7 +108,7 @@
             </li>
           </ul>
           <p class="todo-list__open">
-            Your open Todos: {{ numberOfOpenToDos }}
+            Your Open Todos: {{ numberOfOpenToDos }}
           </p>
         </section>
       </div>

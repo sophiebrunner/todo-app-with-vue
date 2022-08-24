@@ -5,6 +5,8 @@ Vue.createApp({
       description: "",
       filter: "all",
       isChecked: false,
+      txtEdit: "Edit",
+      readOnly: true,
     };
   },
 
@@ -30,15 +32,15 @@ Vue.createApp({
 
     numberOfOpenToDos() {
       return this.toDos.filter((toDo) => !toDo.done).length;
-      // let openToDos = 0;
-
-      // for (let toDo of this.toDos) {
-      //   if (toDo.done === false) {
-      //     openToDos++;
-      //   }
-      // }
-
-      // return openToDos;
+      /* Weitere Option:
+      let openToDos = 0;
+      for (let toDo of this.toDos) {
+        if (toDo.done === false) {
+            openToDos++;
+            }
+          }
+      return openToDos;
+      */
     },
   },
 
@@ -54,6 +56,8 @@ Vue.createApp({
       this.toDos = JSON.parse(localStorage.getItem("toDos")) || [];
     },
 
+    // Größte ID rausfiltern und 1 draufzählen
+    // Weitere Optionen: Math.max(), universal unique identifier, randomisierte Nummer + timestamp vergeben
     generateId() {
       let id = 1;
       if (this.toDos.length > 0) {
@@ -81,10 +85,22 @@ Vue.createApp({
 
     onCheckboxChange(singleToDo) {
       this.isChecked = singleToDo.done;
+      // 🐞 Debuggen: Funktioniert das überhaupt? Alle Todos werden durchgestrichen.
       this.saveData();
     },
 
-    editToDo() {},
+    editToDo() {
+      if (this.txtEdit === "Edit") {
+        this.txtEdit = "Save";
+        this.readOnly = false;
+      } else if (this.txtEdit === "Save") {
+        this.txtEdit = "Edit";
+        this.readOnly = true;
+      }
+      this.saveData();
+      // 🐞 Debuggen: Alle Buttons reagieren
+      // 🐞 Debuggen: Checkbox darf nicht gecheckt werden! Wie?
+    },
 
     removeSingleToDo(singleToDo) {
       this.toDos = this.toDos.filter((toDo) => {
@@ -95,11 +111,7 @@ Vue.createApp({
 
     removeDoneToDos() {
       this.toDos = this.toDos.filter((toDo) => toDo.done === false);
-      this, this.saveData();
+      this.saveData();
     },
   },
 }).mount("#app");
-
-// Wenn To Dos löschen möglich: größte id rausfiltern und dort +1
-// Math.max() // id des letzten Elements // ((universal unique identifier)) // random number vergeben und mit aktuellem timestamp arbeiten (timestamp + randomnumber)
-// Beim Hinzufügen der toDos id generieren (id: Code)
