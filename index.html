@@ -7,29 +7,31 @@
     <meta name="author" content="Sophie Brunner" />
     <meta
       name="description"
-      content="To-Do-App in the framework VueJS. Basic functions are adding, listing and marking To-Dos. Advanced functions are filter To-Dos and delete To-Dos."
+      content="Todo App in the framework Vue.js. Basic functions are adding, listing and marking Todos. Advanced functions are filter Todos and delete (done) Todos."
     />
-    <title>To-Do-App with VueJS</title>
+    <title>Todo App with Vue.js</title>
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <header class="page-header">
+    <header class="page-header" ref="header">
       <h1>Todo App</h1>
     </header>
 
     <main id="app">
+      <!-- Input area -->
       <div class="todo-app__wrapper">
-        <form @submit.prevent class="add-todo">
+        <form class="add-todo" @submit.prevent>
           <input
             type="text"
-            v-model="description"
             placeholder="Get sh*t done!"
             class="add-todo__input"
+            v-model="description"
           />
-          <button v-on="toDoAddingEvents" class="add-todo__btn">Add</button>
+          <button class="add-todo__btn" v-on="toDoAddingEvents">Add</button>
         </form>
 
+        <!-- Filter area -->
         <section class="filter-and-delete">
           <h2>Filter & Options</h2>
           <ul class="filter-options">
@@ -37,9 +39,9 @@
               type="radio"
               name="filter-todos"
               id="filter-all-todos"
+              class="filter-and-delete__radio"
               value="all"
               v-model="filter"
-              class="filter-and-delete__radio"
               checked
             />
             <label for="filter-all-todos">All</label>
@@ -47,61 +49,69 @@
               type="radio"
               name="filter-todos"
               id="filter-open-todos"
+              class="filter-and-delete__radio"
               value="open"
               v-model="filter"
-              class="filter-and-delete__radio"
             />
             <label for="filter-open-todos">Open</label>
             <input
               type="radio"
               name="filter-todos"
               id="filter-done-todos"
+              class="filter-and-delete__radio"
               value="done"
               v-model="filter"
-              class="filter-and-delete__radio"
             />
             <label for="filter-done-todos">Done</label>
           </ul>
-          <button @click="removeDoneToDos" class="filter-and-delete__btn">
+          <!-- Remove all done Todos -->
+          <button class="filter-and-delete__btn" @click="removeDoneToDos">
             Remove Done Todos
           </button>
         </section>
 
+        <!-- List all Todos -->
         <section id="todo-list">
           <h2>Your Todos</h2>
           <ul class="todo-list__container">
             <li
-              v-for="toDo in filteredToDos"
-              :key="toDo.id"
               class="todo-list__item"
+              v-for="(toDo, index) in filteredToDos"
+              :key="toDo.id"
             >
               <input
                 type="checkbox"
                 :id="'todo' + toDo.id"
-                v-model="toDo.done"
-                v-model="isChecked"
-                @change="onCheckboxChange(toDo)"
                 class="todo-list__item--checkbox"
+                v-model="toDo.done"
+                :disabled="toDo.edit"
+                @change="onCheckboxChange(toDo)"
               />
               <label
-                :for="'todo' + toDo.id"
                 class="todo-list__item--label"
+                :for="'todo' + toDo.id"
                 :class="{ checked: isChecked }"
               >
                 <input
                   type="text"
-                  v-model="toDo.description"
-                  :readonly="readOnly"
                   class="todo-list__item--description"
-                  :class="{ checked: isChecked, edit: !readOnly }"
+                  ref="description"
+                  v-model="toDo.description"
+                  :readonly="!toDo.edit"
+                  :class="{ checked: toDo.done }"
                 />
               </label>
-              <button @click="editToDo" class="todo-list__item--btn-edit">
-                {{ txtEdit }}
+              <!-- Buttons Edit & Remove -->
+              <button
+                class="todo-list__item--btn-edit"
+                :data-index="index"
+                @click="editToDo($event, toDo)"
+              >
+                {{ toDo.edit ? "Save" : "Edit" }}
               </button>
               <button
-                @click="removeSingleToDo(toDo)"
                 class="todo-list__item--btn-delete"
+                @click="removeSingleToDo(toDo)"
               >
                 Remove
               </button>

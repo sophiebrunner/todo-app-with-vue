@@ -7,6 +7,7 @@
 }
 
 body {
+  min-height: 100vh;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -33,9 +34,10 @@ main,
 }
 
 main {
-  min-height: 100vh;
   /* Warum Scrollbar? */
   display: flex;
+  /* Element nimmt restlichen Platz komplett ein */
+  flex: 1;
   justify-content: center;
   background-color: var(--clr-bg);
 }
@@ -52,6 +54,7 @@ section + section {
 /* Class-Stylings */
 
 /* Wenn Eigenschaften auf mehrere Classes zutreffen (die aber z. B. weit auseinanderliegen): wie strukturieren? */
+/* Hilfsklassen, z. B. für unterschiedliche Textlayouts, Abstände */
 
 .page-header {
   text-align: center;
@@ -193,6 +196,6 @@ section + section {
 
 /* Dynamische Stylings */
 
-.checked {
+.checked[readonly] {
   text-decoration: line-through;
 }

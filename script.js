@@ -4,9 +4,6 @@ Vue.createApp({
       toDos: [],
       description: "",
       filter: "all",
-      isChecked: false,
-      txtEdit: "Edit",
-      readOnly: true,
     };
   },
 
@@ -70,11 +67,13 @@ Vue.createApp({
     },
 
     addToDo() {
+      this.description = this.description.trim().replace(/\s\s+/g, " ");
       if (this.description.length >= 5) {
         this.toDos.push({
           description: this.description,
           done: false,
           id: this.generateId(),
+          edit: false,
         });
         this.saveData();
         this.description = "";
@@ -83,23 +82,21 @@ Vue.createApp({
       }
     },
 
-    onCheckboxChange(singleToDo) {
-      this.isChecked = singleToDo.done;
-      // 🐞 Debuggen: Funktioniert das überhaupt? Alle Todos werden durchgestrichen.
+    onCheckboxChange() {
       this.saveData();
     },
 
-    editToDo() {
-      if (this.txtEdit === "Edit") {
-        this.txtEdit = "Save";
-        this.readOnly = false;
-      } else if (this.txtEdit === "Save") {
-        this.txtEdit = "Edit";
-        this.readOnly = true;
+    editToDo(event, singleToDo) {
+      const index = event.target.dataset.index;
+      if (singleToDo.edit === false) {
+        singleToDo.edit = true;
+        // Focus- und Blur-Methode für HTML-Elemente
+        this.$refs.description[index].focus();
+      } else if (singleToDo.edit === true) {
+        singleToDo.edit = false;
       }
       this.saveData();
-      // 🐞 Debuggen: Alle Buttons reagieren
-      // 🐞 Debuggen: Checkbox darf nicht gecheckt werden! Wie?
+      // <element ref="test"></test> -> funktioniert wie querySelectorAll()
     },
 
     removeSingleToDo(singleToDo) {
